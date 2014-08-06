@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Node Commander</title>
+    <style type="text/css">
+        body {
+            font-family:monospace;
+        }
+        #nodes { 
+            width: 600px; 
+        }
+        tr.selected { 
+            background-color: #c6c6fc; 
+        }
+        td.name {
+            width: 400px;
+        }
+        td.size {
+            width: 100px;
+            text-align: right;
+        }
+        td.mtime {
+            width: 100px;
+            text-align: right;
+        }
+        thead td {
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+    <script type="text/javascript">
+      document.onkeydown = function (e) {
+            var key = window.event ? event.keyCode : e.keyCode,
+                selected = document.getElementById('nodes').getElementsByClassName('selected')[0],
+                nextSelected;
+            
+            if(!selected) {
+                return;
+            }
+
+            switch(key)
+            {
+                case 13: // enter
+                    if(selected.getAttribute("data-is-directory") === "true") {
+                        document.location += selected.getAttribute("data-name") + "/";
+                    }
+
+                    e.preventDefault();
+                    break;
+                case 38: // up
+                    nextSelected = selected.previousElementSibling || selected.parentNode.lastElementChild;
+                    selected.className = '';
+                    nextSelected.className = 'selected';
+                    
+                    e.preventDefault();
+                    break;
+                case 40: // down
+                    nextSelected = selected.nextElementSibling || selected.parentNode.firstElementChild;
+                    selected.className = '';
+                    nextSelected.className = 'selected';
+                    
+                    e.preventDefault();
+                    break;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Node Commander</h1>
+    <p>
+        Use UP, DOWN and ENTER to navigate.
+    </p>
+    <table>
+        <thead>
+            <tr>
+                <td>Name</td>
+                <td>Size</td>
+                <td>Modification</td>
+            </tr>
+        </thead>
+        <tbody id="nodes">
+            {{~it.nodes :value:index}}
+            <tr class="{{= value.selected ? 'selected' : '' }}" data-name="{{= value.name }}" data-is-directory="{{= value.isDirectory }}">
+                <td class="name">
+                    {{= value.isDirectory ? '/' : '&nbsp;'}}{{= value.name }}
+                </td>
+                <td class="size">
+                    {{= value.size }}
+                </td>
+                <td class="mtime">
+                    {{= value.mtime.getDate() }}.{{= value.mtime.getMonth() }}.{{= value.mtime.getFullYear() }}
+                </td>
+            </tr>
+            {{~}}
+        </tbody>
+    </table>
+</body>
