@@ -2,7 +2,7 @@
 var http = require('http'),
     fs = require('fs'),
     doT = require('dot'),
-    root = "/",
+    root = ".",
     path,
     nodeCompareFn = function(otherNode) {
         if(!this.isDirectory && otherNode.isDirectory){
