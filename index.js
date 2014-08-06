@@ -78,5 +78,5 @@ http.createServer(function(request, response) {
         });
     });
 
-}).listen(8080);
+}).listen(process.env.PORT || 8080);
 console.log('Listening on port 8080...');
