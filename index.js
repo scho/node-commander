@@ -2,7 +2,8 @@
 var http = require('http'),
     fs = require('fs'),
     doT = require('dot'),
-    root = ".",
+    root = "./",
+    port = process.env.PORT || 8080,
     path,
     nodeCompareFn = function(otherNode) {
         if(!this.isDirectory && otherNode.isDirectory){
@@ -78,5 +79,5 @@ http.createServer(function(request, response) {
         });
     });
 
-}).listen(process.env.PORT || 8080);
-console.log('Listening on port 8080...');
+}).listen(port);
+console.log('Listening on port ' + port + '...');
