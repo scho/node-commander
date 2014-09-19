@@ -12,11 +12,10 @@ var http = require('http'),
         if(!otherNode.isDirectory && this.isDirectory){
             return -1;
         }
-        return this.localeLowerCaseName.localeCompare(otherNode.localeLowerCaseName);
+        return this.name.toLocaleLowerCase().localeCompare(otherNode.name.toLocaleLowerCase());
     },
     Node = function(name, stats) {
         this.name = name;
-        this.localeLowerCaseName = name.toLocaleLowerCase();
         this.selected = false;
         this.isDirectory = stats.isDirectory();
         this.mtime = stats.mtime;
@@ -51,16 +50,15 @@ http.createServer(function(request, response) {
         }
 
         fs.readdir(path, function(error, files) {
+            var nodes;
+
             response.writeHead(200);
-            var nodes = [],
-                htmlNodes = '';
 
             files = files || [];
 
-            for(var i = 0; i < files.length; i += 1){
-                node = new Node(files[i], fs.lstatSync(path + files[i]));
-                nodes.push(node);
-            }
+            nodes = files.map(function(file){
+                return new Node(file, fs.lstatSync(path + file));
+            });
 
             nodes.sort(function(a,b) {
                 return a.compare(b);
